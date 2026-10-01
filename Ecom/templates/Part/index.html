@@ -1,0 +1,640 @@
+
+{% extends "main.html" %}
+{% load static %}
+
+
+<style>
+/* ==========================================================================
+  Global Dark Core Theme Design (Matching Mockup Colors)
+   ========================================================================== */
+* {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+
+      body {
+        background-color: #0f172a; /* Deep charcoal navy blue */
+        color: #cbd5e1; /* Soft high visibility text gray */
+        min-height: 100vh;
+      }
+
+      /* Master Grid Structure Frame Layout split screen controls */
+      .app-layout {
+        display: flex;
+        flex-direction: row;
+        min-height: 100vh;
+      }
+
+      @media (max-width: 1024px) {
+        .app-layout {
+          flex-direction: column;
+        }
+      }
+
+      /* ==========================================================================
+   LEFT: E-commerce Product Catalogs Panels
+   ========================================================================== */
+      .storefront-panel {
+        width: 60%;
+        padding: 40px;
+      }
+
+      @media (max-width: 1024px) {
+        .storefront-panel {
+          width: 100%;
+        }
+      }
+
+      .storefront-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #334155;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+
+      .brand-title {
+        color: #ffffff;
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+      }
+
+      .cart-controls {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .cart-badge {
+        background-color: rgba(20, 184, 166, 0.15);
+        color: #2dd4bf; /* Teal Accent tint */
+        padding: 6px 16px;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+
+      /* Base button UI patterns configurations */
+      .btn {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .btn-primary {
+        background-color: #0d9488;
+        color: #ffffff;
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        background-color: #0cc5b3;
+      }
+
+      .btn-primary:disabled {
+        background-color: #334155;
+        color: #94a3b8;
+        cursor: not-allowed;
+      }
+
+      .section-title {
+        font-size: 1.25rem;
+        color: #94a3b8;
+        margin-bottom: 24px;
+        font-weight: 500;
+      }
+
+      /* Product Cards Grid Containers patterns */
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 20px;
+      }
+
+      .product-card {
+        background-color: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      .img-placeholder {
+        background-color: #334155;
+        height: 140px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        color: #94a3b8;
+        font-style: italic;
+        margin-bottom: 12px;
+      }
+
+      .product-name {
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .product-category {
+        font-size: 0.75rem;
+        color: #64748b;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+      }
+
+      .rating {
+        color: #f59e0b; /* Amber Stars */
+        font-size: 0.75rem;
+        margin: 4px 0 8px 0;
+      }
+
+      .product-desc {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        line-height: 1.4;
+        margin-bottom: 16px;
+      }
+
+      .product-action-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #334155;
+        padding-top: 12px;
+        margin-top: auto;
+      }
+
+      .product-price {
+        color: #2dd4bf;
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+
+      .btn-add-cart {
+        background-color: #0d9488;
+        color: #ffffff;
+        padding: 6px 12px;
+        font-size: 0.75rem;
+      }
+
+      .btn-add-cart:hover {
+        background-color: #14b8a6;
+      }
+
+      /* ==========================================================================
+   RIGHT: Order Management Side Log Panels
+   ========================================================================== */
+      .management-panel {
+        width: 40%;
+        background-color: #090d16; /* Extra dark sidebar depth slate colors */
+        border-left: 1px solid #1e293b;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      @media (max-width: 1024px) {
+        .management-panel {
+          width: 100%;
+          border-left: none;
+          border-top: 1px solid #1e293b;
+        }
+      }
+
+      .panel-title {
+        color: #ffffff;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .panel-subtitle {
+        font-size: 0.75rem;
+        color: #475569;
+        font-style: italic;
+      }
+
+      .block-heading {
+        font-size: 1rem;
+        color: #e2e8f0;
+        margin-bottom: 16px;
+        font-weight: 600;
+      }
+
+      .orders-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      /* Individual Order History Cards configurations */
+      .order-list-row {
+        background-color: #0f172a;
+        border: 1px solid #1e293b;
+        border-radius: 6px;
+        padding: 16px;
+        cursor: pointer;
+        transition:
+          border-color 0.2s,
+          background-color 0.2s;
+      }
+
+      .order-list-row:hover {
+        border-color: #475569;
+      }
+
+      .order-list-row.active {
+        background-color: rgba(13, 148, 136, 0.1);
+        border-color: #0d9488;
+      }
+
+      .row-header,
+      .row-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .row-header {
+        margin-bottom: 10px;
+      }
+
+      .order-id-label {
+        color: #ffffff;
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+
+      /* Badge status indicators variations matching status choice logic structures */
+      .status-badge {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 2px 10px;
+        border-radius: 4px;
+      }
+
+      .status-paid {
+        background-color: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+      }
+
+      .status-shipped {
+        background-color: rgba(59, 130, 246, 0.15);
+        color: #3b82f6;
+      }
+
+      .order-date {
+        font-size: 0.75rem;
+        color: #64748b;
+      }
+
+      .order-cost {
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #e2e8f0;
+      }
+
+      /* Dynamic pulse flare animations on freshly created local items selections */
+      .new-order-pulse {
+        animation: highlightedFlash 1.5s ease-out;
+      }
+
+      @keyframes highlightedFlash {
+        0% {
+          background-color: #0d9488;
+        }
+        100% {
+          background-color: #0f172a;
+        }
+      }
+
+      /* Individual Itemized Receipt Table parameters definitions */
+      .receipt-card {
+        background-color: #0f172a;
+        border: 1px solid #1e293b;
+        border-radius: 8px;
+        padding: 20px;
+      }
+
+      .receipt-title {
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 700;
+        border-bottom: 1px solid #1e293b;
+        padding-bottom: 12px;
+        margin-bottom: 16px;
+      }
+
+      .receipt-metadata {
+        font-size: 0.75rem;
+        color: #64748b;
+        line-height: 1.8;
+        margin-bottom: 20px;
+      }
+
+      .receipt-total-row {
+        font-size: 0.875rem;
+        margin-top: 4px;
+      }
+
+      .receipt-total-row span {
+        color: #ffffff;
+        font-weight: 700;
+      }
+
+      .text-white {
+        color: #ffffff;
+      }
+
+      .receipt-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.75rem;
+        text-align: left;
+      }
+
+      .receipt-table th {
+        color: #64748b;
+        font-weight: 500;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #1e293b;
+      }
+
+      .receipt-table td {
+        padding: 10px 0;
+        color: #cbd5e1;
+        border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+      }
+
+      .receipt-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* Utilities formatting alignments options */
+      .text-center {
+        text-align: center;
+      }
+      .text-right {
+        text-align: right;
+      }
+    </style>
+  </head>
+
+{% block content %}
+
+  <body>
+    <!-- Main Container Grid Split -->
+    <div class="app-layout">
+      <!-- ================= LEFT: STOREFRONT CATALOG PANEL ================= -->
+      <main class="storefront-panel">
+        <header class="storefront-header">
+          <h1 class="brand-title">Ecom Store</h1>
+          <div class="cart-controls">
+            <span id="cart-counter" class="cart-badge">Cart (0)</span>
+            <button id="checkout-btn" class="btn btn-primary" disabled>
+              Checkout Action
+            </button>
+          </div>
+        </header>
+
+        <section class="catalog-section">
+          <h2 class="section-title">New Collection Arrivals</h2>
+
+          <div class="products-grid">
+            <!-- Product Card 1 -->
+            <div class="product-card">
+              <div class="img-placeholder">img_url</div>
+              <div class="product-info">
+                <h3 class="product-name">Wireless Headphones</h3>
+                <span class="product-category">Electronics</span>
+                <div class="rating">★★★★★</div>
+                <p class="product-desc">
+                  High-fidelity audio sound signature over-ear headphones with
+                  active noise cancelling filters.
+                </p>
+              </div>
+              <div class="product-action-row">
+                <span class="product-price">$149.99</span>
+                <button
+                  class="btn btn-add-cart"
+                  onclick="addItemToCart('Wireless Headphones', 149.99)"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+
+            <!-- Product Card 2 -->
+            <div class="product-card">
+              <div class="img-placeholder">img_url</div>
+              <div class="product-info">
+                <h3 class="product-name">Bluetooth Speaker</h3>
+                <span class="product-category">Electronics</span>
+                <div class="rating">★★★★★</div>
+                <p class="product-desc">
+                  Waterproof outdoor wireless portable speaker with pure deep
+                  bass radiator arrays.
+                </p>
+              </div>
+              <div class="product-action-row">
+                <span class="product-price">$99.99</span>
+                <button
+                  class="btn btn-add-cart"
+                  onclick="addItemToCart('Bluetooth Speaker', 99.99)"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- ================= RIGHT: MANAGEMENT ACCORDION PANEL ================= -->
+      <aside class="management-panel">
+        <div class="panel-header-block">
+          <h2 class="panel-title">Customer Order Management</h2>
+          <p class="panel-subtitle">
+            (orderViewSet) IsAuthenticated access active
+          </p>
+        </div>
+
+        <!-- Interactive Orders History Log Container -->
+        <div class="orders-log-block">
+          <h3 class="block-heading">My Orders</h3>
+
+          <div class="orders-list" id="orders-list-container">
+            <!-- Order Row 1 -->
+            <div
+              class="order-list-row active"
+              onclick="
+                viewOrderDetails(1045, 'Paid', 'Oct 28, 2026', 349.97, [
+                  { name: 'Wireless Headphones', qty: 1, price: 149.99 },
+                  { name: 'Bluetooth Speaker', qty: 2, price: 99.99 },
+                ])
+              "
+            >
+              <div class="row-header">
+                <span class="order-id-label">Order #1045</span>
+                <span class="status-badge status-paid">Paid</span>
+              </div>
+              <div class="row-footer">
+                <span class="order-date">Oct 28, 2026</span>
+                <span class="order-cost">$349.97</span>
+              </div>
+            </div>
+
+            <!-- Order Row 2 -->
+            <div
+              class="order-list-row"
+              onclick="
+                viewOrderDetails(1039, 'Shipped', 'Oct 15, 2026', 89.5, [
+                  { name: 'System Cable Upgrade', qty: 1, price: 89.5 },
+                ])
+              "
+            >
+              <div class="row-header">
+                <span class="order-id-label">Order #1039</span>
+                <span class="status-badge status-shipped">Shipped</span>
+              </div>
+              <div class="row-footer">
+                <span class="order-date">Oct 15, 2026</span>
+                <span class="order-cost">$89.50</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Individual Order Item Receipt Breakdowns -->
+        <div id="receipt-details-panel" class="receipt-card">
+          <h3 id="receipt-id" class="receipt-title">Order Details - #1045</h3>
+
+          <div class="receipt-metadata">
+            <p>
+              <strong>Status:</strong>
+              <span id="receipt-status" class="text-white">Paid</span>
+            </p>
+            <p>
+              <strong>Date:</strong>
+              <span id="receipt-date" class="text-white">Oct 28, 2026</span>
+            </p>
+            <p class="receipt-total-row">
+              <strong>Total:</strong> <span id="receipt-total">$349.97</span>
+            </p>
+          </div>
+
+          <table class="receipt-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th class="text-center">Qty</th>
+                <th class="text-right">Price</th>
+              </tr>
+            </thead>
+            <tbody id="receipt-items-body">
+              <tr>
+                <td>Wireless Headphones</td>
+                <td class="text-center">1</td>
+                <td class="text-right">$149.99</td>
+              </tr>
+              <tr>
+                <td>Bluetooth Speaker</td>
+                <td class="text-center">2</td>
+                <td class="text-right">$99.99</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </aside>
+    </div>
+
+    <!-- UI Interaction Script (Simulates your checkout views.py array parameters) -->
+    <script>
+              let currentCart = [];
+              let runningOrderIdCount = 1046;
+
+              function addItemToCart(name, price) {
+                  currentCart.push({ name, price });
+                  document.getElementById('cart-counter').innerText = `Cart (${currentCart.length})`;
+                  document.getElementById('checkout-btn').removeAttribute('disabled');
+              }
+
+              document.getElementById('checkout-btn').addEventListener('click', () => {
+                  if(currentCart.length === 0) return;
+
+                  let total = currentCart.reduce((sum, item) => sum + item.price, 0);
+                  let dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+                  // Format simulation items object map
+                  let nestedItems = [];
+                  currentCart.forEach(item => {
+                      let match = nestedItems.find(i => i.name === item.name);
+                      if(match) { match.qty += 1; }
+                      else { nestedItems.push({ name: item.name, qty: 1, price: item.price }); }
+                  });
+
+                  // Push into Mock view logs list stack element
+                  const list = document.getElementById('orders-list-container');
+                  const rowHTML = `
+                      <div class="order-list-row new-order-pulse" onclick="viewOrderDetails(${runningOrderIdCount}, 'Paid', '${dateStr}', ${total.toFixed(2)}, ${JSON.stringify(nestedItems).replace(/"/g, '&quot;')})">
+                          <div class="row-header">
+                              <span class="order-id-label">Order #${runningOrderIdCount}</span>
+                              <span class="status-badge status-paid">Paid</span>
+                          </div>
+                          <div class="row-footer">
+                              <span class="order-date">${dateStr}</span>
+                              <span class="order-cost">$${total.toFixed(2)}</span>
+                          </div>
+                      </div>`;
+                  list.insertAdjacentHTML('afterbegin', rowHTML);
+
+                  // Auto click view the freshly minted recipe logging snapshot
+                  viewOrderDetails(runningOrderIdCount, 'Paid', dateStr, total.toFixed(2), nestedItems);
+
+                  // Reset state parameters
+                  currentCart = [];
+                  document.getElementById('cart-counter').innerText = "Cart (0)";
+                  document.getElementById('checkout-btn').setAttribute('disabled', 'true');
+                  runningOrderIdCount++;
+              });
+
+              function viewOrderDetails(id, status, date, total, itemsArray) {
+                  document.querySelectorAll('.order-list-row').forEach(row => row.classList.remove('active'));
+                  event.currentTarget?.classList.add('active');
+
+                  document.getElementById('receipt-id').innerText = `Order Details - #${id}`;
+                  document.getElementById('receipt-status').innerText = status;
+                  document.getElementById('receipt-date').innerText = date;
+                  document.getElementById('receipt-total').innerText = `$${Number(total).toFixed(2)}`;
+
+                  let bodyHTML = "";
+                  itemsArray.forEach(item => {
+                      bodyHTML += `<tr> } 
+    </script> 
+
+
+{% endblock %}

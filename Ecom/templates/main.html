@@ -1,0 +1,23 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ecommerce Site</title>
+    <link rel="stylesheet" href="{% static 'static/css/style.css' %}" />
+  </head>
+  <body style="margin: 0; padding: 0; font-family: sans-serif">
+    <!-- 1. Stitches your clean header right here -->
+    {% include "Part/header.html" %}
+
+    <!-- 2. Dynamic content zone for child pages -->
+    <main style="min-height: 80vh">
+      {% block content %} 
+      {% endblock content %}
+    </main>
+
+    <!-- 3. Stitches your clean footer right here -->
+    {% include "Part/footer.html" %}
+  </body>
+</html>

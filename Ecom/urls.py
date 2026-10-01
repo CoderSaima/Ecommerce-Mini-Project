@@ -15,20 +15,28 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf import settings                      
+from django.conf.urls.static import static
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from Ecom_app.views import productViewSet, orderViewSet
-
+from Ecom_app import views
 router = DefaultRouter()
 router.register(r'products', productViewSet, basename='product')
 router.register(r'orders', orderViewSet, basename='order')
 
 urlpatterns = [
+
+    path('', views.store_home, name='shop_home'),
+    path('shop/', views.start_page, name='shop_page'),
+
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
-
     # 🔐 Authentication Gates
     path('api/v1/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

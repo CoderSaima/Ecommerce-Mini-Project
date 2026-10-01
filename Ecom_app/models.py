@@ -18,8 +18,8 @@ class product(models.Model):
     stock = models.IntegerField()
     img_url = models.CharField(max_length=500)
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
     
 # ..... Order Model .....
 class Order(models.Model):
@@ -46,4 +46,5 @@ class order_items(models.Model):
     price_at_purchase = models.DecimalField( max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.quantity} x {self.product.name if self.product else 'Deleted Product'} (Order #{self.order.id})"
+        # return f"{self.quantity} x {self.product.name if self.product else 'Deleted Product'} (Order #{self.order.id})"
+        return f"{self.quantity} x {self.product.product_name if self.product else 'Deleted Product'} (Order #{self.order.id})"
